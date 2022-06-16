@@ -6,8 +6,8 @@ import 'package:maeve/model/furniture_model.dart';
 import 'package:maeve/utils/constant.dart';
 
 class CartPage extends StatelessWidget {
-  final CartController controller = Get.find();
   CartPage({Key? key}) : super(key: key);
+  final CartController controller = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class CartPage extends StatelessWidget {
       ),
       body: Column(
         children: [
-          CartProductList(controller: controller),
+          _cartProductList(),
           CartTotal(),
         ],
       ),
@@ -37,16 +37,9 @@ class CartPage extends StatelessWidget {
   }
 }
 
-class CartProductList extends StatelessWidget {
-  const CartProductList({
-    Key? key,
-    required this.controller,
-  }) : super(key: key);
-
-  final CartController controller;
-
-  @override
-  Widget build(BuildContext context) {
+@override
+Widget _cartProductList() {
+  return GetBuilder<CartController>(builder: ((controller) {
     return Container(
       color: Colors.white,
       height: 550,
@@ -55,13 +48,13 @@ class CartProductList extends StatelessWidget {
           itemBuilder: ((context, index) {
             return CartProductCard(
               controller: controller,
-              furniture: controller.furniture.keys.toList()[index],
-              quality: controller.furniture.values.toList()[index],
+              furniture: controller.furniture.values.toList()[index].furniture,
+              quality: controller.furniture.values.toList()[index].quantity,
               index: index,
             );
           })),
     );
-  }
+  }));
 }
 
 class CartProductCard extends StatelessWidget {
@@ -100,7 +93,7 @@ class CartProductCard extends StatelessWidget {
               ),
             ),
             title: Text(
-              furniture.title,
+              furniture.title + ' ' + 'x${quality}',
               style: TextStyle(
                 fontSize: w * 0.06,
                 fontWeight: FontWeight.normal,
@@ -108,7 +101,7 @@ class CartProductCard extends StatelessWidget {
             ),
             trailing: Text(
               NumberFormat.currency(locale: 'en', symbol: '₦')
-                  .format(Furniture.furniture[index].price)
+                  .format(furniture.price * quality)
                   .toString(),
               style: TextStyle(
                 fontSize: w * 0.06,
@@ -153,15 +146,17 @@ class CartTotal extends StatelessWidget {
                   SizedBox(
                     height: h * 0.010,
                   ),
-                  Text(
-                    NumberFormat.currency(locale: 'en', symbol: '₦')
-                        .format(123455)
-                        .toString(),
-                    style: TextStyle(
-                      fontSize: w * 0.05,
-                      fontWeight: FontWeight.normal,
-                    ),
-                  )
+                  GetBuilder<CartController>(builder: ((controller) {
+                    return Text(
+                      NumberFormat.currency(locale: 'en', symbol: '₦')
+                          .format(controller.productTotal)
+                          .toString(),
+                      style: TextStyle(
+                        fontSize: w * 0.05,
+                        fontWeight: FontWeight.normal,
+                      ),
+                    );
+                  }))
                 ],
               ),
               SizedBox(

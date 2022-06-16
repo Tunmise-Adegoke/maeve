@@ -45,21 +45,23 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             backgroundColor: Colors.white,
             actions: [
-              Badge(
-                position: BadgePosition.topEnd(top: 5, end: 5),
-                badgeContent: Text(
-                    // cartController.addProducts.toString(),
-                    cartController.totalQty.value.toString()),
-                showBadge: true,
-                badgeColor: Colors.red,
-                child: IconButton(
-                    onPressed: () {
-                      Get.to(() => CartPage());
-                    },
-                    icon: Icon(
-                      Icons.shopping_cart_checkout_rounded,
-                      color: Colors.black,
-                    )),
+              Obx(
+                () => Badge(
+                  position: BadgePosition.topEnd(top: 5, end: 5),
+                  badgeContent: Text(
+                      // cartController.addProducts.toString(),
+                      cartController.totalQty.value.toString()),
+                  showBadge: true,
+                  badgeColor: Colors.red,
+                  child: IconButton(
+                      onPressed: () {
+                        Get.to(() => CartPage());
+                      },
+                      icon: Icon(
+                        Icons.shopping_cart_checkout_rounded,
+                        color: Colors.black,
+                      )),
+                ),
               )
             ]),
         backgroundColor: Colors.white,

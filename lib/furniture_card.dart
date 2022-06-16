@@ -41,11 +41,10 @@ class FurnitureCard extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
-              child: Expanded(
-                  child: Text(
+              child: Text(
                 Furniture.furniture[index].title,
                 style: kSmallTextstyle,
-              )),
+              ),
             ),
             SizedBox(
               height: h * 0.005,
