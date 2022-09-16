@@ -1,9 +1,15 @@
-class Furniture {
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+
+class Furniture extends Equatable {
   final int id;
   final String title;
   final int price;
   final String image;
 
+  // ignore: prefer_const_constructors_in_immutables
   Furniture({
     required this.id,
     required this.title,
@@ -107,4 +113,68 @@ class Furniture {
         price: 25000,
         image: 'assets/images/vase 1.png'),
   ];
+
+  Furniture copyWith({
+    int? id,
+    String? title,
+    int? price,
+    String? image,
+  }) {
+    return Furniture(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      price: price ?? this.price,
+      image: image ?? this.image,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'title': title,
+      'price': price,
+      'image': image,
+    };
+  }
+
+  factory Furniture.fromMap(Map<String, dynamic> map) {
+    return Furniture(
+      id: map['id'] as int,
+      title: map['title'] as String,
+      price: map['price'] as int,
+      image: map['image'] as String,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Furniture.fromJson(String source) =>
+      Furniture.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  List<Object?> get props => [
+        id,
+        title,
+        price,
+        image,
+      ];
+
+  Map productQunatity(furniture) {
+    var quantity = {};
+
+    furniture.ForEach((furniture) {
+      if (!quantity.containsKey(furniture)) {
+        quantity[furniture] = 1;
+      } else {
+        quantity[furniture] += 1;
+      }
+    });
+    return quantity;
+  }
+
+  double get totalProducts => furniture.fold(0, (total, current) {
+        return total + current.price;
+      });
+
+  String get totalProductsString => totalProducts.toStringAsFixed(2);
 }
